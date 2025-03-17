@@ -18,7 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx tsx version-tracker.ts
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
