@@ -5,7 +5,7 @@ on:
     - cron:  '*/30 * * * *' # Runs every half hour
   workflow_dispatch:
 jobs:
-  test:
+  version-tracker:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -17,8 +17,8 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install chromium
-    - name: Run Playwright tests
-      run: echo "VERSION=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
+    - name: Check for updates
+      run: echo "OUTPUT=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
@@ -29,6 +29,9 @@ jobs:
         GOTIFY_SERVER: ${{ secrets.GOTIFY_SERVER }}
         GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
       run: |
+        VERSION=$(echo "${OUTPUT}" | sed -n '1p')
+        DATE=$(echo "${OUTPUT}" | sed -n '2p')
+
         LOCAL_VER=$(git -c 'versionsort.suffix=-' \
             ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/version-tracker.git \
             | tail --lines=1 \
@@ -37,7 +40,7 @@ jobs:
         if [[ ${LOCAL_VER} != ${VERSION} ]]; then
             echo "Local version: ${LOCAL_VER}"
             echo "Latest upstream version: ${VERSION}"
-            echo "Updating to latest version..."
+            echo "Updating to latest version released on ${DATE}..."
             git config --global user.name "Erik Thomsen"
             git config --global user.email ${EMAIL}
             TAG_NAME="${VERSION}"
@@ -46,14 +49,8 @@ jobs:
 
             curl -X POST \
               -H "Content-Type: application/json" \
-              -d '{ "message": "Spark Aligner\nNew Version Found: v'${VERSION}'", "title": "Version Tracker" }' \
+              -d '{ "message": "Spark Aligner\nNew Version Found: v'${VERSION}'\nRelease Date: '${DATE}'", "title": "Version Tracker" }' \
               "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}"
         else
             echo "No updates available..."
         fi
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
