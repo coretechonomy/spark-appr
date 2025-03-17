@@ -44,12 +44,12 @@ export let rawVersion: string = '';
   await browser.close();
 })();
 
-const token = process.env.GITHUB_TOKEN; // GitHub token with repo permissions
+const token = process.env.GH_PAT; // GitHub token with repo permissions
 const owner = 'coretechonomy';
 const repo = 'version-tracker';
 
 if (!token) {
-  throw new Error('GITHUB_TOKEN environment variable is not set');
+  throw new Error('GH_PAT environment variable is not set');
 }
 
 const octokit = new Octokit({
