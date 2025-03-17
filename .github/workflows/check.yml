@@ -18,7 +18,11 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium
     - name: Check for updates
-      run: echo "OUTPUT=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
+      run: | # Export the multiline output to the environment
+        OUTPUT=$(npx tsx version-tracker.ts)
+        echo "OUTPUT<<EOF" >> $GITHUB_ENV
+        echo "$OUTPUT" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
