@@ -20,9 +20,8 @@ jobs:
     - name: Check for updates
       run: | # Export the multiline output to the environment
         OUTPUT=$(npx tsx version-tracker.ts)
-        echo "OUTPUT<<EOF" >> $GITHUB_ENV
-        echo "$OUTPUT" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+        VERSION=$(echo "${OUTPUT}" | sed -n '1p') >> $GITHUB_ENV
+        DATE=$(echo "${OUTPUT}" | sed -n '2p') >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
