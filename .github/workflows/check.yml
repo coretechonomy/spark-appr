@@ -45,7 +45,10 @@ jobs:
             git tag -a $TAG_NAME -m "Release $TAG_NAME"
             git push origin $TAG_NAME
 
-            curl -X POST "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}" -F "message=Spark Aligner\nNew Version: ${VERSION}" -F "title=Version Tracker" -F "priority=1"
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -d '{ "message": "Spark Aligner\nNew Version Found: v${VERSION}", "title": "Version Tracker" }' \
+              "https://${GOTIFY_SERVER}.com/message?token={GOTIFY_TOKEN}"
         else
             echo "No updates available..."
         fi
