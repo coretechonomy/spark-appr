@@ -48,7 +48,7 @@ jobs:
             curl -X POST \
               -H "Content-Type: application/json" \
               -d '{ "message": "Spark Aligner\nNew Version Found: v${VERSION}", "title": "Version Tracker" }' \
-              "https://${GOTIFY_SERVER/message?token=${GOTIFY_TOKEN}"
+              "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}"
         else
             echo "No updates available..."
         fi
