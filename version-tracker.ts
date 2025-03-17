@@ -24,7 +24,7 @@ import { chromium } from 'playwright';
   await page.goto(process.env.DOWNLOAD_PAGE_URL || '');
 
   // Grab the value from the table using xpath
-  const version = await page.$eval(
+  const rawVersion = await page.$eval(
     '//*[@id="introduction"]/table/tbody/tr[1]/td[2]',
     (element) => element.textContent?.trim() || ''
   );
@@ -33,6 +33,8 @@ import { chromium } from 'playwright';
   //   '//*[@id="introduction"]/table/tbody/tr[1]/td[3]',
   //   (element) => element.textContent?.trim() || ''
   // );
+
+  const version = rawVersion.split(' ')[0]; // Extract the version part
 
   console.log(`${version}`);
   // console.log(`${releaseDate}`);
