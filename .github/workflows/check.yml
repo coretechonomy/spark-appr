@@ -18,9 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium
     - name: Run Playwright tests
-      run: |
-        version=$(npx tsx version-tracker.ts)
-        echo "version=$version" >> $GITHUB_ENV
+      run: echo "version=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
@@ -28,9 +26,12 @@ jobs:
     - name: Create tag
       env:
         VERSION: ${{ env.version }}
+        EMAIL: ${{ secrets.EMAIL }}
       run: |
         TAG_NAME="${version}"
         git tag -a $TAG_NAME -m "Release $TAG_NAME"
+        git config --global user.name "Erik Thomsen"
+        git config --global user.email "${EMAIL}"
         git push origin $TAG_NAME
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
