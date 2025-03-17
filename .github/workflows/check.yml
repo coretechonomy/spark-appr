@@ -32,9 +32,6 @@ jobs:
         GOTIFY_SERVER: ${{ secrets.GOTIFY_SERVER }}
         GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
       run: |
-        VERSION=$(echo "${OUTPUT}" | sed -n '1p')
-        DATE=$(echo "${OUTPUT}" | sed -n '2p')
-
         LOCAL_VER=$(git -c 'versionsort.suffix=-' \
             ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/version-tracker.git \
             | tail --lines=1 \
