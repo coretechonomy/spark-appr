@@ -28,10 +28,10 @@ jobs:
         VERSION: ${{ env.version }}
         EMAIL: ${{ secrets.EMAIL }}
       run: |
+        git config --global user.name "Erik Thomsen"
+        git config --global user.email ${EMAIL}
         TAG_NAME="${version}"
         git tag -a $TAG_NAME -m "Release $TAG_NAME"
-        git config --global user.name "Erik Thomsen"
-        git config --global user.email "${EMAIL}"
         git push origin $TAG_NAME
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
