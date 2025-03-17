@@ -27,12 +27,28 @@ jobs:
       env:
         VERSION: ${{ env.version }}
         EMAIL: ${{ secrets.EMAIL }}
+        GOTIFY_SERVER: ${{ secrets.GOTIFY_SERVER }}
+        GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
       run: |
-        git config --global user.name "Erik Thomsen"
-        git config --global user.email ${EMAIL}
-        TAG_NAME="${version}"
-        git tag -a $TAG_NAME -m "Release $TAG_NAME"
-        git push origin $TAG_NAME
+        LOCAL_VER=$(git -c 'versionsort.suffix=-' \
+            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/version-tracker.git \
+            | tail --lines=1 \
+            | cut --delimiter='/' --fields=3)
+
+        if [[ $LOCAL_VER != $VERSION ]]; then
+            echo "Local version: $LOCAL_VER"
+            echo "Latest upstream version: $VERSION"
+            echo "Updating to latest version..."
+            git config --global user.name "Erik Thomsen"
+            git config --global user.email ${EMAIL}
+            TAG_NAME="${version}"
+            git tag -a $TAG_NAME -m "Release $TAG_NAME"
+            git push origin $TAG_NAME
+
+            curl -X POST "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}" -F "message=New Version: ${VERSION}" -F "title=Spark Aligner" -F "priority=1"
+        else
+            echo "No updates available..."
+        fi
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
