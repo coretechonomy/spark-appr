@@ -18,7 +18,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium
     - name: Run Playwright tests
-      run: echo "VERSION=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
+      run: echo "VERSION=$(npx ts-node version-tracker.ts)" >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
@@ -46,7 +46,7 @@ jobs:
 
             curl -X POST \
               -H "Content-Type: application/json" \
-              -d '{ "message": "Spark Aligner\nNew Version Found: v${VERSION}", "title": "Version Tracker" }' \
+              -d '{ "message": "Spark Aligner\nNew Version Found: v'${VERSION}'", "title": "Version Tracker" }' \
               "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}"
         else
             echo "No updates available..."
