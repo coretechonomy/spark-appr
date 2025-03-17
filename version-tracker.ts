@@ -29,15 +29,15 @@ import { chromium } from 'playwright';
     (element) => element.textContent?.trim() || ''
   );
 
-  // const releaseDate = await page.$eval(
-  //   '//*[@id="introduction"]/table/tbody/tr[1]/td[3]',
-  //   (element) => element.textContent?.trim() || ''
-  // );
+  const releaseDate = await page.$eval(
+    '//*[@id="introduction"]/table/tbody/tr[1]/td[3]',
+    (element) => element.textContent?.trim() || ''
+  );
 
   const version = rawVersion.split(' ')[0]; // Extract the version part
 
   console.log(`${version}`);
-  // console.log(`${releaseDate}`);
+  console.log(`${releaseDate}`);
 
   // Close the browser
   await browser.close();
