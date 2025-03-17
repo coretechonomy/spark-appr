@@ -18,14 +18,13 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium
     - name: Run Playwright tests
-      run: echo "version=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
+      run: echo "VERSION=$(npx tsx version-tracker.ts)" >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
         PASSWORD: ${{ secrets.PASSWORD }}
     - name: Create tag and send notification
       env:
-        VERSION: ${{ env.version }}
         EMAIL: ${{ secrets.EMAIL }}
         GOTIFY_SERVER: ${{ secrets.GOTIFY_SERVER }}
         GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
@@ -35,13 +34,13 @@ jobs:
             | tail --lines=1 \
             | cut --delimiter='/' --fields=3)
 
-        if [[ $LOCAL_VER != $VERSION ]]; then
-            echo "Local version: $LOCAL_VER"
-            echo "Latest upstream version: $VERSION"
+        if [[ ${LOCAL_VER} != ${VERSION} ]]; then
+            echo "Local version: ${LOCAL_VER}"
+            echo "Latest upstream version: ${VERSION}"
             echo "Updating to latest version..."
             git config --global user.name "Erik Thomsen"
             git config --global user.email ${EMAIL}
-            TAG_NAME="${version}"
+            TAG_NAME="${VERSION}"
             git tag -a $TAG_NAME -m "Release $TAG_NAME"
             git push origin $TAG_NAME
 
