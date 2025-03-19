@@ -23,7 +23,7 @@ jobs:
         run: npx playwright install chromium
       - name: Download SETUP_EXE
         run: | # Split the output into two variables
-          OUTPUT=$(npx tsx version-tracker.ts)
+          OUTPUT=$(npx tsx download.ts)
           echo VERSION=$(echo "${OUTPUT}" | sed -n '1p') >> $GITHUB_ENV
           echo DATE=$(echo "${OUTPUT}" | sed -n '2p') >> $GITHUB_ENV
         env:
