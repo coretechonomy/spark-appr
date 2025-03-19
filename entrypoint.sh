@@ -9,7 +9,7 @@ xvfb-run --auto-servernum --server-args="-screen 0 1024x768x16" bash -c \
     sleep 5; \
     ls ~/.wine/drive_c/users/root/AppData/Local/Temp; \
     if [ -f ~/.wine/drive_c/users/root/AppData/Local/Temp/${MSI_FILE} ]; then \
-        mv ~/.wine/drive_c/users/root/AppData/Local/Temp/${MSI_FILE} /tmp/etechonomy/${MSI_FILE}.msi; \
+        mv ~/.wine/drive_c/users/root/AppData/Local/Temp/${MSI_FILE} /tmp/etechonomy/${MSI_FILE}; \
         exit 0; \
     fi; \
     done && wait \$pid && echo 'Wine process finished'"
