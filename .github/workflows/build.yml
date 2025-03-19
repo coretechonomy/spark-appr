@@ -46,8 +46,8 @@ jobs:
           SETUP_EXE: ${{ secrets.SETUP_EXE }}
           MSI_FILE: ${{ secrets.MSI_FILE }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: MSI File
-          path: "./artifact.msi"
+          files: artifact.msi
