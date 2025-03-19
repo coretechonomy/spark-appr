@@ -1,0 +1,52 @@
+# build.yml
+name: Build and extract MSI
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium
+      - name: Download SETUP_EXE
+        run: | # Split the output into two variables
+          OUTPUT=$(npx tsx version-tracker.ts)
+          echo VERSION=$(echo "${OUTPUT}" | sed -n '1p') >> $GITHUB_ENV
+          echo DATE=$(echo "${OUTPUT}" | sed -n '2p') >> $GITHUB_ENV
+        env:
+          DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg SETUP_EXE="${{ secrets.SETUP_EXE }}" \
+            --build-arg MSI_FILE="${{ secrets.MSI_FILE }}" \
+            -t etechonomy/docker-wine .
+        env:
+          SETUP_EXE: ${{ secrets.SETUP_EXE }}
+          MSI_FILE: ${{ secrets.MSI_FILE }}
+      - name: Run Docker container
+        run: docker run --name docker-wine --rm -e SETUP_EXE="${{ secrets.SETUP_EXE }}" -e MSI_FILE="${{ secrets.MSI_FILE }}" -v $(pwd):/tmp/etechonomy etechonomy/docker-wine
+        env:
+          SETUP_EXE: ${{ secrets.SETUP_EXE }}
+          MSI_FILE: ${{ secrets.MSI_FILE }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MSI File
+          path: "./artifact.msi"
