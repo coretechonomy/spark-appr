@@ -48,7 +48,7 @@ jobs:
           MSI_FILE: ${{ vars.MSI_FILE }}
 
       - name: Encrypt MSI File
-        run: gpg --batch -c --passphrase '${{ secrets.PASSPHRASE }}' MSI_FILE
+        run: gpg --batch -c --passphrase '${{ secrets.PASSPHRASE }}' ${{ vars.MSI_FILE }}
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
 
