@@ -57,5 +57,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          body: "Version: v'${RAW_VERSION}'\nRelease Date: '${DATE}'"
+          body: "Version: v${RAW_VERSION}\nRelease Date: ${DATE}"
           files: ${{ vars.MSI_FILE }}.gpg
