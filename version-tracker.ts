@@ -36,6 +36,7 @@ import { chromium } from 'playwright';
 
   const version = rawVersion.split(' ')[0]; // Extract the version part
 
+  console.log(`${rawVersion}`);
   console.log(`${version}`);
   console.log(`${releaseDate}`);
 

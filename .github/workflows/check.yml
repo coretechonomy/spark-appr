@@ -22,8 +22,9 @@ jobs:
     - name: Check for updates
       run: | # Split the output into two variables
         OUTPUT=$(npx tsx version-tracker.ts)
-        echo VERSION=$(echo "${OUTPUT}" | sed -n '1p') >> $GITHUB_ENV
-        echo DATE=$(echo "${OUTPUT}" | sed -n '2p') >> $GITHUB_ENV
+        echo RAW_VERSION=$(echo "${OUTPUT}" | sed -n '1p') >> $GITHUB_ENV
+        echo VERSION=$(echo "${OUTPUT}" | sed -n '2p') >> $GITHUB_ENV
+        echo DATE=$(echo "${OUTPUT}" | sed -n '3p') >> $GITHUB_ENV
       env:
         DOWNLOAD_PAGE_URL: ${{ secrets.DOWNLOAD_PAGE_URL }}
         USERNAME: ${{ secrets.USERNAME }}
