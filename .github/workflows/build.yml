@@ -34,7 +34,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t etechonomy/docker-wine:latest .
+          docker build -t etechonomy/docker-wine .
         env:
           SETUP_EXE: ${{ vars.SETUP_EXE }}
           MSI_FILE: ${{ vars.MSI_FILE }}
