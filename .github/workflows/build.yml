@@ -34,10 +34,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            --build-arg SETUP_EXE="${{ vars.SETUP_EXE }}" \
-            --build-arg MSI_FILE="${{ vars.MSI_FILE }}" \
-            -t etechonomy/docker-wine .
+          docker build -t etechonomy/docker-wine:latest .
         env:
           SETUP_EXE: ${{ vars.SETUP_EXE }}
           MSI_FILE: ${{ vars.MSI_FILE }}
