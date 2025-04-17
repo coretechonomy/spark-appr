@@ -36,7 +36,7 @@ jobs:
         GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
       run: |
         LOCAL_VER=$(git -c 'versionsort.suffix=-' \
-            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/version-tracker.git \
+            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/spark-appr.git \
             | tail --lines=1 \
             | cut --delimiter='/' --fields=3)
 
@@ -52,7 +52,7 @@ jobs:
 
             curl -X POST \
               -H "Content-Type: application/json" \
-              -d '{ "message": "Spark Aligner\nNew Version: v'${VERSION}'\nRelease Date: '${DATE}'", "title": "Version Tracker" }' \
+              -d '{ "message": "Spark Approver\nNew Version: v'${VERSION}'\nRelease Date: '${DATE}'", "title": "Version Tracker" }' \
               "https://${GOTIFY_SERVER}/message?token=${GOTIFY_TOKEN}"
         else
             echo "No updates available..."
