@@ -50,11 +50,26 @@ jobs:
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
 
+      - name: Populate nuspec variables with envsubst
+        run: |
+          export TAG_NAME="${{ github.ref_name }}"
+          export RAW_VERSION="${{ env.RAW_VERSION }}"
+          export RAW_DATE="${{ env.DATE }}"
+          envsubst < chocolatey/spark-approver.nuspec > chocolatey/spark-approver.nuspec.out
+          mv chocolatey/spark-approver.nuspec.out chocolatey/spark-approver.nuspec
+
+      - name: Pack Chocolatey Package
+        run: |
+          cd chocolatey
+          docker run --rm -v $PWD:/root --entrypoint bash docker.io/chocolatey/choco -c 'choco pack'
+
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${{ vars.MSI_FILE }}.gpg
+          files: |
+            ${{ vars.MSI_FILE }}.gpg
+            chocolatey/*.nupkg
           body: |
             Version: v${{ env.RAW_VERSION }}
             Release Date: ${{ env.DATE }}
