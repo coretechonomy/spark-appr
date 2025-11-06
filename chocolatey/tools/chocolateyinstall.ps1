@@ -58,3 +58,6 @@ $packageArgs = @{
 }
 
 Install-ChocolateyInstallPackage @packageArgs
+
+Write-Verbose 'removing desktop shortcut'
+Remove-Item -Path "${env:PUBLIC}\Desktop\Spark Approver.lnk" -ErrorAction SilentlyContinue
