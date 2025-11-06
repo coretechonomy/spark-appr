@@ -56,12 +56,9 @@ jobs:
           export RAW_VERSION="${{ env.RAW_VERSION }}"
           export RAW_DATE="${{ env.DATE }}"
           envsubst < chocolatey/spark-approver.nuspec > chocolatey/spark-approver.nuspec.out
+          envsubst '$TAG_NAME' < chocolatey/tools/chocolateyinstall.ps1 > chocolatey/tools/chocolateyinstall.ps1.out
           mv chocolatey/spark-approver.nuspec.out chocolatey/spark-approver.nuspec
-
-      - name: Replace $TAG_NAME in chocolateyinstall.ps1
-        run: |
-          $tag = "${{ github.ref_name }}"
-          (Get-Content chocolatey/tools/chocolateyinstall.ps1) -creplace '\$TAG_NAME', $tag | Set-Content chocolatey/tools/chocolateyinstall.ps1
+          mv chocolatey/tools/chocolateyinstall.ps1.out chocolatey/tools/chocolateyinstall.ps1
 
       - name: Pack Chocolatey Package
         run: |
