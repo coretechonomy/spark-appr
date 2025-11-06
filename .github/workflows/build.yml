@@ -56,8 +56,8 @@ jobs:
           export RAW_VERSION="${{ env.RAW_VERSION }}"
           export RAW_DATE="${{ env.DATE }}"
           envsubst < chocolatey/spark-approver.nuspec > chocolatey/spark-approver.nuspec.out
-          mv chocolatey/spark-approver.nuspec.out chocolatey/spark-approver.nuspec
           envsubst < chocolatey/tools/chocolateyinstall.ps1 > chocolatey/tools/chocolateyinstall.ps1.out
+          mv chocolatey/spark-approver.nuspec.out chocolatey/spark-approver.nuspec
           mv chocolatey/tools/chocolateyinstall.ps1.out chocolatey/tools/chocolateyinstall.ps1
 
       - name: Pack Chocolatey Package

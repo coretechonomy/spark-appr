@@ -7,9 +7,10 @@ $passphrase = "$($pp['passphrase'])"
 
 [string]$owner = "coretechonomy"
 [string]$repo = "spark-appr"
+[string]$tag = "$TAG_NAME"
 
 # GitHub API URL for release
-$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/tags/$TAG_NAME"
+$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}"
 
 # Make the web request to GitHub API
 $response = Invoke-RestMethod -Uri $apiUrl -Headers @{
