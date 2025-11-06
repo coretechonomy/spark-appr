@@ -8,8 +8,8 @@ $passphrase = "$($pp['passphrase'])"
 [string]$owner = "coretechonomy"
 [string]$repo = "spark-appr"
 
-# GitHub API URL for latest release
-$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/latest"
+# GitHub API URL for release
+$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/$TAG_NAME"
 
 # Make the web request to GitHub API
 $response = Invoke-RestMethod -Uri $apiUrl -Headers @{
@@ -20,14 +20,14 @@ $response = Invoke-RestMethod -Uri $apiUrl -Headers @{
 $asset = $response.assets | Where-Object { $_.name -eq "SparkApprover.msi.gpg" }
 
 if ($asset) {
-    # Display the latest release information for the specific asset
-    Write-Host "Latest release for ${owner}/${repo}:"
+    # Display the release information for the specific asset
+    Write-Host "Release information for ${owner}/${repo}:"
     Write-Host "Tag: $($response.tag_name)"
     Write-Host "Name: $($response.name)"
     Write-Host "Published at: $($response.published_at)"
     Write-Host "Download URL: $($asset.browser_download_url)"
 } else {
-    Write-Host "Asset SparkApprover.msi.gpg not found in the latest release."
+    Write-Host "Asset SparkApprover.msi.gpg not found in the specified release."
 }
 
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
