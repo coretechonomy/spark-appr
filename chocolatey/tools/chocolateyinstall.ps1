@@ -9,7 +9,7 @@ $passphrase = "$($pp['passphrase'])"
 [string]$repo = "spark-appr"
 
 # GitHub API URL for release
-$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/$TAG_NAME"
+$apiUrl = "https://api.github.com/repos/${owner}/${repo}/releases/tags/$TAG_NAME"
 
 # Make the web request to GitHub API
 $response = Invoke-RestMethod -Uri $apiUrl -Headers @{
