@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         token: ${{ secrets.GH_PAT }} # Required due to: https://github.com/orgs/community/discussions/25702
     - uses: actions/setup-node@v4
