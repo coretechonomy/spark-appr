@@ -34,13 +34,11 @@ jobs:
         EMAIL: ${{ secrets.EMAIL }}
         GOTIFY_SERVER: ${{ secrets.GOTIFY_SERVER }}
         GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
-      run: |        
-        LOCAL_VER=$(git -c 'versionsort.suffix=-alpha' \
-            -c 'versionsort.suffix=-beta' \
-            -c 'versionsort.suffix=-rc' \
-            ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coretechonomy/spark-appr.git \
-            | tail --lines=1 \
-            | cut --delimiter='/' --fields=3)
+      run: |                
+        LOCAL_VER=$(git ls-remote --refs --sort='version:refname' --tags https://github.com/coretechonomy/spark-appr.git \
+            | cut --delimiter='/' --fields=3 \
+            | grep -vE "alpha|beta|rc" \
+            | tail --lines=1)
 
         if [[ ${LOCAL_VER} != ${VERSION} ]]; then
             echo "Local version: ${LOCAL_VER}"
